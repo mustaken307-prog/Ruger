@@ -1,0 +1,60 @@
+﻿@model RC.ViewModels.CarVM
+@{
+    ViewData["Title"] = "إضافة سيارة";
+}
+
+<div class="max-w-3xl mx-auto px-6 py-12">
+    <div class="glass p-8 rounded-2xl border border-slate-700">
+        <h1 class="text-2xl font-bold text-white mb-6">إضافة سيارة جديدة</h1>
+
+        <form asp-action="Add" method="post" enctype="multipart/form-data">
+            <div asp-validation-summary="ModelOnly" class="text-red-400 mb-4"></div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+                <div>
+                    <label asp-for="Brand" class="block text-sm text-slate-300 mb-2"></label>
+                    <input asp-for="Brand" class="w-full bg-slate-900 border border-slate-600 text-white rounded-lg p-3 focus:border-purple-500 outline-none" />
+                    <span asp-validation-for="Brand" class="text-red-400 text-xs"></span>
+                </div>
+                <div>
+                    <label asp-for="ModelName" class="block text-sm text-slate-300 mb-2"></label>
+                    <input asp-for="ModelName" class="w-full bg-slate-900 border border-slate-600 text-white rounded-lg p-3 focus:border-purple-500 outline-none" />
+                    <span asp-validation-for="ModelName" class="text-red-400 text-xs"></span>
+                </div>
+                <div>
+                    <label asp-for="Price" class="block text-sm text-slate-300 mb-2"></label>
+                    <input asp-for="Price" type="number" class="w-full bg-slate-900 border border-slate-600 text-white rounded-lg p-3 focus:border-purple-500 outline-none" />
+                    <span asp-validation-for="Price" class="text-red-400 text-xs"></span>
+                </div>
+                <div>
+                    <label asp-for="Location" class="block text-sm text-slate-300 mb-2"></label>
+                    <input asp-for="Location" class="w-full bg-slate-900 border border-slate-600 text-white rounded-lg p-3 focus:border-purple-500 outline-none" />
+                    <span asp-validation-for="Location" class="text-red-400 text-xs"></span>
+                </div>
+            </div>
+
+            <div class="mb-6">
+                <label asp-for="Description" class="block text-sm text-slate-300 mb-2"></label>
+                <textarea asp-for="Description" rows="4" class="w-full bg-slate-900 border border-slate-600 text-white rounded-lg p-3 focus:border-purple-500 outline-none"></textarea>
+                <span asp-validation-for="Description" class="text-red-400 text-xs"></span>
+            </div>
+
+            <div class="mb-8">
+                <label asp-for="ImageFile" class="block text-sm text-slate-300 mb-2"></label>
+                <input asp-for="ImageFile" type="file" accept="image/*" class="w-full bg-slate-900 border border-slate-600 text-white rounded-lg p-2 focus:border-purple-500 outline-none file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-purple-600/20 file:text-purple-400 hover:file:bg-purple-600/30" />
+                <span asp-validation-for="ImageFile" class="text-red-400 text-xs"></span>
+            </div>
+
+            <div class="flex gap-4">
+                <button type="submit" class="flex-1 bg-gradient-to-r from-blue-700 to-purple-700 text-white font-bold py-3 rounded-lg hover:shadow-lg transition-all">
+                    حفظ السيارة
+                </button>
+                <a asp-action="Index" class="px-6 py-3 border border-slate-600 text-slate-300 rounded-lg hover:bg-slate-800 transition-all">إلغاء</a>
+            </div>
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

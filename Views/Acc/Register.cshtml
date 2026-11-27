@@ -1,0 +1,63 @@
+﻿@model RC.ViewModels.RegVM
+@{
+    ViewData["Title"] = "إنشاء حساب";
+}
+
+<div class="flex items-center justify-center min-h-[80vh] px-4 py-10">
+    <div class="glass p-8 rounded-2xl w-full max-w-lg border border-slate-700 relative overflow-hidden group">
+        <div class="absolute -bottom-10 -left-10 w-40 h-40 bg-blue-600 rounded-full blur-[80px] opacity-30 group-hover:opacity-50 transition-opacity"></div>
+
+        <div class="text-center mb-8 relative z-10">
+            <h2 class="text-3xl font-tech font-bold text-white mb-2">انضم إلينا</h2>
+            <p class="text-slate-400">أنشئ حسابك لعرض وبيع سياراتك</p>
+        </div>
+
+        <form asp-action="Register" method="post" class="relative z-10">
+            <div asp-validation-summary="ModelOnly" class="text-red-400 text-sm mb-4 bg-red-400/10 p-3 rounded-lg border border-red-400/20"></div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+                <div>
+                    <label asp-for="FullName" class="block text-sm text-slate-300 mb-2"></label>
+                    <input asp-for="FullName" class="w-full bg-slate-900 border border-slate-700 text-white rounded-lg py-3 px-4 focus:outline-none focus:border-purple-500 transition-colors" placeholder="الاسم الثلاثي" />
+                    <span asp-validation-for="FullName" class="text-red-400 text-xs mt-1 block"></span>
+                </div>
+                <div>
+                    <label asp-for="PhoneNumber" class="block text-sm text-slate-300 mb-2"></label>
+                    <input asp-for="PhoneNumber" maxlength="10" class="w-full bg-slate-900 border border-slate-700 text-white rounded-lg py-3 px-4 focus:outline-none focus:border-purple-500 transition-colors" placeholder="05xxxxxxxx" />
+                    <span asp-validation-for="PhoneNumber" class="text-red-400 text-xs mt-1 block"></span>
+                </div>
+            </div>
+
+            <div class="mb-4">
+                <label asp-for="Email" class="block text-sm text-slate-300 mb-2"></label>
+                <input asp-for="Email" class="w-full bg-slate-900 border border-slate-700 text-white rounded-lg py-3 px-4 focus:outline-none focus:border-purple-500 transition-colors" placeholder="example@mail.com" />
+                <span asp-validation-for="Email" class="text-red-400 text-xs mt-1 block"></span>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
+                <div>
+                    <label asp-for="Password" class="block text-sm text-slate-300 mb-2"></label>
+                    <input asp-for="Password" class="w-full bg-slate-900 border border-slate-700 text-white rounded-lg py-3 px-4 focus:outline-none focus:border-purple-500 transition-colors" placeholder="••••••••" />
+                    <span asp-validation-for="Password" class="text-red-400 text-xs mt-1 block"></span>
+                </div>
+                <div>
+                    <label asp-for="ConfirmPassword" class="block text-sm text-slate-300 mb-2"></label>
+                    <input asp-for="ConfirmPassword" class="w-full bg-slate-900 border border-slate-700 text-white rounded-lg py-3 px-4 focus:outline-none focus:border-purple-500 transition-colors" placeholder="••••••••" />
+                    <span asp-validation-for="ConfirmPassword" class="text-red-400 text-xs mt-1 block"></span>
+                </div>
+            </div>
+
+            <button type="submit" class="w-full bg-gradient-to-r from-blue-700 to-purple-700 hover:from-blue-600 hover:to-purple-600 text-white font-bold py-3 rounded-lg transition-all hover:shadow-[0_0_15px_rgba(139,92,246,0.4)] mb-4">
+                إنشاء الحساب
+            </button>
+
+            <p class="text-center text-sm text-slate-400">
+                لديك حساب بالفعل؟ <a asp-action="Login" class="text-purple-400 hover:text-purple-300">تسجيل الدخول</a>
+            </p>
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

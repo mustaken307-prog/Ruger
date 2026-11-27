@@ -1,0 +1,130 @@
+﻿@model IEnumerable<RC.Models.Car>
+@{
+    ViewData["Title"] = "السيارات المعروضة";
+}
+
+<div class="max-w-7xl mx-auto px-6 py-12">
+
+    <!-- العنوان ومربع البحث -->
+    <div class="flex flex-col md:flex-row justify-between items-center mb-12 gap-6">
+        <div>
+            <h1 class="text-4xl font-tech font-bold text-white mb-2">اكتشف <span class="text-purple-500">فخامتك</span></h1>
+            <p class="text-slate-400">تصفح أحدث السيارات المعروضة في منصتنا.</p>
+        </div>
+
+        <form asp-action="Index" method="get" class="relative w-full md:w-96 group">
+            <input type="text" name="search" value="@ViewBag.Search" placeholder="ابحث عن ماركة أو موديل..."
+                   class="w-full bg-slate-900 border border-slate-700 text-white rounded-full py-3 px-6 pr-12 focus:outline-none focus:border-purple-500 transition-all glow-silver">
+            <button type="submit" class="absolute right-4 top-3 text-slate-400 group-hover:text-purple-400">
+                <i data-lucide="search" class="w-6 h-6"></i>
+            </button>
+        </form>
+    </div>
+
+    <!-- شبكة السيارات -->
+    @if (!Model.Any())
+    {
+        <div class="text-center py-20 glass rounded-2xl">
+            <i data-lucide="car-front" class="w-20 h-20 mx-auto text-slate-600 mb-4"></i>
+            <h2 class="text-2xl text-slate-400">لا توجد سيارات معروضة حالياً أو تطابق بحثك.</h2>
+        </div>
+    }
+    else
+    {
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            @foreach (var car in Model)
+            {
+                <div class="glass rounded-2xl overflow-hidden group hover:scale-[1.02] transition-all duration-300 glow-purple">
+                    <!-- صورة السيارة -->
+                    <div class="relative h-64 overflow-hidden">
+                        <img src="@(string.IsNullOrEmpty(car.ImageUrl) ? "https://images.unsplash.com/photo-1503376780353-7e6692767b70?auto=format&fit=crop&q=80&w=800" : car.ImageUrl)"
+                             alt="@car.ModelName" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500">
+                        <div class="absolute top-4 right-4 bg-black/70 backdrop-blur-md px-3 py-1 rounded-full border border-slate-600">
+                            <span class="text-purple-400 font-bold">$@car.Price.ToString("N0")</span>
+                        </div>
+                    </div>
+
+                    <!-- التفاصيل -->
+                    <div class="p-6">
+                        <div class="flex justify-between items-start mb-4">
+                            <div>
+                                <p class="text-sm text-slate-400">@car.Brand</p>
+                                <h3 class="text-xl font-bold text-white">@car.ModelName</h3>
+                            </div>
+                            <div class="flex items-center gap-1 text-sm text-slate-400">
+                                <i data-lucide="map-pin" class="w-4 h-4 text-blue-400"></i>
+                                @car.Location
+                            </div>
+                        </div>
+                        <p class="text-slate-400 text-sm mb-6 line-clamp-2">@car.Description</p>
+
+                        <button onclick="openModal('@car.Id', '@car.ModelName')"
+                                class="w-full bg-slate-800 hover:bg-slate-700 text-white font-bold py-3 rounded-xl border border-slate-600 hover:border-purple-500 transition-all flex justify-center items-center gap-2">
+                            <i data-lucide="shopping-cart" class="w-5 h-5"></i> شراء الآن
+                        </button>
+                    </div>
+                </div>
+            }
+        </div>
+    }
+</div>
+
+<!-- نافذة الشراء المنبثقة (Modal) -->
+<div id="buyModal" class="fixed inset-0 bg-black/80 backdrop-blur-sm hidden items-center justify-center z-[100]">
+    <div class="glass p-8 rounded-2xl w-full max-w-md mx-4 relative border border-slate-600">
+        <button onclick="closeModal()" class="absolute top-4 left-4 text-slate-400 hover:text-white">
+            <i data-lucide="x" class="w-6 h-6"></i>
+        </button>
+        <h2 class="text-2xl font-bold text-white mb-2 text-center">تأكيد الطلب</h2>
+        <p id="modalCarName" class="text-purple-400 text-center mb-6 font-semibold"></p>
+
+        <form id="buyForm">
+            <input type="hidden" id="modalCarId" name="carId">
+            <label class="block text-sm text-slate-300 mb-2">أدخل رقم هاتفك (10 أرقام):</label>
+            <input type="text" name="phone" id="phone" maxlength="10" required
+                   class="w-full bg-slate-900 border border-slate-600 text-white rounded-lg py-3 px-4 focus:outline-none focus:border-purple-500 mb-4 text-center tracking-widest text-lg">
+            <button type="button" onclick="submitBuy()" class="w-full bg-gradient-to-r from-blue-700 to-purple-700 text-white font-bold py-3 rounded-lg hover:shadow-lg transition-all">
+                تأكيد الطلب
+            </button>
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        function openModal(id, name) {
+            document.getElementById('buyModal').classList.remove('hidden');
+            document.getElementById('buyModal').classList.add('flex');
+            document.getElementById('modalCarId').value = id;
+            document.getElementById('modalCarName').innerText = "السيارة: " + name;
+        }
+
+        function closeModal() {
+            document.getElementById('buyModal').classList.add('hidden');
+            document.getElementById('buyModal').classList.remove('flex');
+        }
+
+        async function submitBuy() {
+            const phone = document.getElementById('phone').value;
+            const carId = document.getElementById('modalCarId').value;
+
+            if (phone.length !== 10) {
+                alert("الرجاء إدخال 10 أرقام");
+                return;
+            }
+
+            const formData = new FormData();
+            formData.append('phone', phone);
+            formData.append('carId', carId);
+
+            const response = await fetch('/Hom/Buy', {
+                method: 'POST',
+                body: formData
+            });
+            const result = await response.json();
+
+            alert(result.message);
+            if (result.success) closeModal();
+        }
+    </script>
+}

@@ -1,0 +1,48 @@
+﻿@model IEnumerable<RC.Models.Car>
+@{
+    ViewData["Title"] = "سياراتي";
+}
+
+<div class="max-w-7xl mx-auto px-6 py-12">
+    <div class="flex justify-between items-center mb-8">
+        <div>
+            <h1 class="text-3xl font-bold text-white">سياراتي المعروضة</h1>
+            <p class="text-slate-400">الحد الأقصى المسموح لك: @ViewBag.Quota سيارات</p>
+        </div>
+        <a asp-action="Add" class="bg-gradient-to-r from-blue-700 to-purple-700 text-white px-6 py-3 rounded-lg font-bold flex items-center gap-2 hover:shadow-[0_0_15px_rgba(139,92,246,0.4)] transition-all">
+            <i data-lucide="plus-circle" class="w-5 h-5"></i> إضافة سيارة جديدة
+        </a>
+    </div>
+
+    @if (!Model.Any())
+    {
+        <div class="glass text-center py-20 rounded-2xl border border-slate-700">
+            <i data-lucide="car" class="w-16 h-16 mx-auto text-slate-600 mb-4"></i>
+            <h2 class="text-xl text-slate-400">لم تقم بإضافة أي سيارة بعد.</h2>
+        </div>
+    }
+    else
+    {
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            @foreach (var car in Model)
+            {
+                <div class="glass rounded-xl overflow-hidden border border-slate-700 group">
+                    <img src="@car.ImageUrl" class="w-full h-48 object-cover" alt="@car.ModelName">
+                    <div class="p-5">
+                        <div class="flex justify-between items-start mb-2">
+                            <h3 class="text-xl font-bold text-white">@car.Brand @car.ModelName</h3>
+                            <span class="text-purple-400 font-bold">$@car.Price.ToString("N0")</span>
+                        </div>
+                        <p class="text-sm text-slate-400 mb-4 line-clamp-2">@car.Description</p>
+                        <form asp-action="Delete" method="post" onsubmit="return confirm('هل أنت متأكد من حذف هذه السيارة؟')">
+                            <input type="hidden" name="id" value="@car.Id" />
+                            <button type="submit" class="w-full bg-red-900/30 text-red-400 border border-red-900/50 hover:bg-red-900/50 py-2 rounded-lg transition-colors flex justify-center items-center gap-2">
+                                <i data-lucide="trash" class="w-4 h-4"></i> حذف السيارة
+                            </button>
+                        </form>
+                    </div>
+                </div>
+            }
+        </div>
+    }
+</div>
